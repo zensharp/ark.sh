@@ -2,33 +2,6 @@
 
 set -u
 
-# Functions
-function elapsed()
-{
-	TIMESTAMP="$1"
-	
-	# Convert input to epoch seconds
-	INPUT_EPOCH=$(date --date="$TIMESTAMP" +%s)
-	NOW_EPOCH=$(date +%s)
-
-	# Calculate difference in seconds
-	delta=$((NOW_EPOCH - INPUT_EPOCH))
-
-	# Convert to human-readable format
-	if (( delta < 60 )); then
-		echo "$delta seconds ago"
-	elif (( delta < 3600 )); then
-		mins=$((delta / 60))
-		echo "$mins minute(s) ago"
-	elif (( delta < 86400 )); then
-		hours=$((delta / 3600))
-		echo "$hours hour(s) ago"
-	else
-		days=$((delta / 86400))
-		echo "$days day(s) ago"
-	fi
-}
-
 # Program
 USERNAME=$1
 GAME=$2
@@ -50,6 +23,23 @@ if [[ -f "$DEST_DIR/version.txt" ]]; then
 	TIMESTAMP=$(awk -F '=' '$1 ~ /^\s*timestamp\s*$/ { gsub(/^ +| +$/, "", $2); print $2 }' $DEST_DIR/version.txt)
 	BRANCH=$(awk -F '=' '$1 ~ /^\s*branch\s*$/ { gsub(/^ +| +$/, "", $2); print $2 }' $DEST_DIR/version.txt)
 	
-	ELAPSED=$(elapsed "$TIMESTAMP")
+	# Convert input to epoch seconds
+	INPUT_EPOCH=$(date --date="$TIMESTAMP" +%s)
+	NOW_EPOCH=$(date +%s)
+	# Calculate difference in seconds
+	DELTA=$((NOW_EPOCH - INPUT_EPOCH))
+	# Convert to human-readable format
+	if (( DELTA < 60 )); then
+		ELAPSED="$DELTA seconds ago"
+	elif (( DELTA < 3600 )); then
+		MINS=$((DELTA / 60))
+		ELAPSED="$MINS minute(s) ago"
+	elif (( DELTA < 86400 )); then
+		HOURS=$((DELTA / 3600))
+		ELAPSED="$HOURS hour(s) ago"
+	else
+		DAYS=$((DELTA / 86400))
+		ELAPSED="$DAYS day(s) ago"
+	fi
 	echo "v$VERSION was uploaded $ELAPSED from $BRANCH"
 fi
