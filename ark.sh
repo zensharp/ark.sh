@@ -45,8 +45,6 @@ rm -r $DEST_DIR > /dev/null 2>&1 || true
 chmod +x $DEST_DIR/*.exe > /dev/null 2>&1 || true
 chmod +x $DEST_DIR/*.application > /dev/null 2>&1 || true
 
-DEST_DIR=$PWD
-
 if [[ -f "$DEST_DIR/version.txt" ]]; then
 	VERSION=$(awk -F '=' '$1 ~ /^\s*version\s*$/ { gsub(/^ +| +$/, "", $2); print $2 }' $DEST_DIR/version.txt)
 	TIMESTAMP=$(awk -F '=' '$1 ~ /^\s*timestamp\s*$/ { gsub(/^ +| +$/, "", $2); print $2 }' $DEST_DIR/version.txt)
