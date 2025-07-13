@@ -1,0 +1,8 @@
+{
+	"services": [
+		{
+			"name": "Say Hello",
+			"script": "echo Hello World"
+		}
+	]
+}
